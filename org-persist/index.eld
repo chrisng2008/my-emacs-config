@@ -1,0 +1,2 @@
+;;   -*- mode: lisp-data; -*-
+((:container ((elisp org-element--headline-cache) (elisp org-element--cache) (version "2.3")) :persist-file "fd/4b57d7-b437-4915-a9d9-7b991d1e6348" :associated (:hash "355c2000838ea05b195138d31d36bf66" :file "/Users/chrisng/Desktop/hello.org" :inode 1171839) :expiry 30 :last-access 1747278637.320875 :last-access-hr "2025-05-15T11:10:37+0800") (:container ((index "3.2")) :persist-file "d1/d44492-21a6-4b94-926b-c5d5a3984efa" :associated nil :expiry never :last-access 1746973171.341637 :last-access-hr "2025-05-11T22:19:31+0800"))
