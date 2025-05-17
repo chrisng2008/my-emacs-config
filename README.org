@@ -1,0 +1,6 @@
+#+TITLE: README
+#+AUTHOR: Chris Ng
+#+DATE: 2025.5.17
+* My Emacs Config
+
+这是我最近学习的一些Emacs的相关配置，师从 *子龙山人*。
