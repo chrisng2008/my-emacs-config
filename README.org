@@ -2,6 +2,7 @@
 #+AUTHOR: Chris Ng
 #+DATE: 2025.5.17
 * Emacs配置
+这是我的一些参照 *子龙山人* ， *Emacs China* 的一些Emacs配置，借助 ~Github~ 用于不同平台的同步
 ** Emacs换源
 更换国内源可以避免国外源访问失败的问题
 #+BEGIN_SRC Elisp:
