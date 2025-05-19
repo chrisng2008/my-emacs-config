@@ -131,3 +131,5 @@
       rime-show-candidate 'posframe))
 
 
+;; 高亮当前行
+(global-hl-line-mode 1)
