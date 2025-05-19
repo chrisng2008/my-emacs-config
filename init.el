@@ -31,6 +31,11 @@
 
 (global-set-key (kbd "C-h C-f") 'find-function)
 
+
+;; 同时设置英文字体和中文字体
+;;(set-face-attribute 'default nil :font "JetBrains Mono-16")
+;;(set-fontset-font t 'han (font-spec :family "PingFang SC"))
+
 ;; Windows按键设置
 (when (eq system-type 'windows-nt)
   ;; Windows 特定的键绑定
@@ -43,10 +48,18 @@
   (global-set-key (kbd "s-x") 'kill-region) ;对应Windows上面的Ctrol-x 剪切
   )
 
+(when (eq system-type 'gnu/linux)
+  (global-set-key (kbd "<menu>") nil)
+  (define-key key-translation-map (kbd "<menu>") 'event-apply-super-modifier)
+  (global-set-key (kbd "s-a") 'mark-whole-buffer) ;;对应Windows上面的Ctrl-a 全选
+  (global-set-key (kbd "s-c") 'kill-ring-save) ;;对应Windows上面的Ctrl-c 复制
+  (global-set-key (kbd "s-s") 'save-buffer) ;; 对应Windows上面的Ctrl-s 保存
+  (global-set-key (kbd "s-v") 'yank) ;对应Windows上面的Ctrl-v 粘贴
+  (global-set-key (kbd "s-z") 'undo) ;对应Windows上面的Ctrol-z 撤销
+  (global-set-key (kbd "s-x") 'kill-region) ;对应Windows上面的Ctrol-x 剪切
+)
 
-;; 同时设置英文字体和中文字体
-;;(set-face-attribute 'default nil :font "JetBrains Mono-16")
-;;(set-fontset-font t 'han (font-spec :family "PingFang SC"))
+
 
 ;; 字体配置
 (when (eq system-type 'darwin)
@@ -79,7 +92,7 @@
      default))
  '(package-selected-packages
    '(company doom-themes flucui-themes org-preview-html
-	     org-preview-html-mode))
+	     org-preview-html-mode rime))
  '(warning-suppress-log-types '((ox-latex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -99,3 +112,19 @@
 (add-hook 'org-mode-hook 'visual-line-mode)
 
 (load-theme 'doom-one-light t)
+
+
+(require 'rime)
+
+;;; Code:
+(setq rime-user-data-dir "~/.config/fcitx/rime")
+
+(setq rime-posframe-properties
+      (list :background-color "#333333"
+            :foreground-color "#dcdccc"
+;;            :font "WenQuanYi Micro Hei Mono-14"
+            :font "Source Han Sans SC-14"
+            :internal-border-width 10))
+
+(setq default-input-method "rime"
+      rime-show-candidate 'posframe)
