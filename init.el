@@ -89,7 +89,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("65a4ed5f62a21ad331b18db2bdd519e0404f9f34278051ce2a0807be8dc30d6b"
+   '("8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098"
+     "65a4ed5f62a21ad331b18db2bdd519e0404f9f34278051ce2a0807be8dc30d6b"
      default))
  '(package-selected-packages
    '(company doom-themes flucui-themes org-preview-html
@@ -112,7 +113,7 @@
 ;; org mode 换行
 ;;(add-hook 'org-mode-hook 'visual-line-mode)
 
-(load-theme 'doom-one t)
+(load-theme 'doom-dracula t)
 
 
 ;; 配置跨平台输入法方案
