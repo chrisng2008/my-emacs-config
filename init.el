@@ -59,13 +59,13 @@
   (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
 (when (eq system-type 'windows-nt)
-  (setq fonts '("JetbrainsMono NF Regular"))
+  (setq fonts '("JetbrainsMono Regular"))
   (set-fontset-font t 'unicode "Segoe UI Emoji" nil 'prepend)
   (set-face-attribute 'default nil :font
                       (format "%s:pixelsize=%d" (car fonts) 24)))
 
 (when (eq system-type 'gnu/linux)
-  (setq fonts '("JetbrainsMono NF Regular"))
+  (setq fonts '("Jetbrains Mono" "Source Han Sans SC"))
   (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend)
   (set-face-attribute 'default nil :font
                       (format "%s:pixelsize=%d" (car fonts) 24)))
