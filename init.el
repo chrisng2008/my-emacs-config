@@ -48,6 +48,7 @@
   (global-set-key (kbd "s-x") 'kill-region) ;对应Windows上面的Ctrol-x 剪切
   )
 
+;; Linux的按键配置
 (when (eq system-type 'gnu/linux)
   (global-set-key (kbd "<menu>") nil)
   (define-key key-translation-map (kbd "<menu>") 'event-apply-super-modifier)
