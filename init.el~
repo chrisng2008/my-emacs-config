@@ -17,7 +17,7 @@
 (add-to-list 'load-path "~/.emacs.d/manual-packages/vertico-main")
 (require 'vertico)
 (vertico-mode t)
-
+;; 开启模糊搜索
 (package-install 'orderless)
 (setq completion-styles '(orderless))
 
@@ -46,7 +46,12 @@
 ; Edit the apperacne of Emacs
 (tool-bar-mode -1)
 
-(setq cursor-type '(bar . 5))
+(setq-default cursor-type '(bar . 3))
+(show-paren-mode t)
+
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/awesome-tab/"))
+(require 'awesome-tab)
+(awesome-tab-mode t)
 
 ;; 自动补全插件
 (global-company-mode 1)
@@ -151,7 +156,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(company doom-themes embark keycast marginalia orderless
-	     org-preview-html rime vertico with-editor)))
+	     org-preview-html rime)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
