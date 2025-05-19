@@ -78,7 +78,8 @@
    '("65a4ed5f62a21ad331b18db2bdd519e0404f9f34278051ce2a0807be8dc30d6b"
      default))
  '(package-selected-packages
-   '(company flucui-themes org-preview-html org-preview-html-mode))
+   '(company doom-themes flucui-themes org-preview-html
+	     org-preview-html-mode))
  '(warning-suppress-log-types '((ox-latex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -97,5 +98,4 @@
 ;; org mode 换行
 (add-hook 'org-mode-hook 'visual-line-mode)
 
-;;(flucui-themes-load-style 'light)
-;;(flucui-themes-load-style 'dark)
+(load-theme 'doom-one-light t)
