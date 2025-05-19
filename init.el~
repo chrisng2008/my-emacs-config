@@ -17,7 +17,7 @@
 (add-to-list 'load-path "~/.emacs.d/manual-packages/vertico-main")
 (require 'vertico)
 (vertico-mode t)
-;; 开启模糊搜索
+
 (package-install 'orderless)
 (setq completion-styles '(orderless))
 
