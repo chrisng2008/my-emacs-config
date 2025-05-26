@@ -194,5 +194,9 @@ See `org-capture-templates' for more information."
                  (function org-hugo-new-subtree-post-capture-template))))
 
 
-(setq org-hugo-export-with-author nil)
+;; eww proxy macos
+(when (eq system-type 'darwin)
+(setq url-proxy-services
+      '(("http" . "127.0.0.1:7899")
+        ("https" . "127.0.0.1:7899"))))
 
