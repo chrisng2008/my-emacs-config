@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-capture-last-stored"
+(("org-refile-last-stored"
+ (filename . "~/Documents/knowledge/paper/experiment.org")
+ (front-context-string . "** Contribution ")
+ (rear-context-string . "检索效率的时间上是提升了多少\n\n")
+ (position . 596)
+ (last-modified 26672 18802 758678 0))
+("org-capture-last-stored"
  (filename . "~/Documents/blog/all-blog.org")
  (front-context-string . "** TODO My First")
  (rear-context-string . "r\n\n* Blog Ideas\n")
