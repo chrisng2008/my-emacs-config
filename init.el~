@@ -110,7 +110,8 @@
                       (format "%s:pixelsize=%d" (car fonts) 24)))
 
 (when (eq system-type 'gnu/linux)
-  (setq fonts '("Jetbrains Mono" "Source Han Sans SC"))
+  ;;(setq fonts '("Jetbrains Mono" "Source Han Sans SC"))
+  (setq fonts '("Jetbrains Mono" "Mi Sans"))
   (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend)
   (set-face-attribute 'default nil :font
                       (format "%s:pixelsize=%d" (car fonts) 24)))
@@ -155,9 +156,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(company doom-themes embark keycast marginalia orderless
-	     org-preview-html ox-hugo rime use-package-hydra
-	     with-editor)))
+   '(company doom-themes embark exec-path-from-shell keycast marginalia
+	     orderless org-preview-html ox-hugo rime tablist
+	     use-package-hydra)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
