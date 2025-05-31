@@ -116,7 +116,7 @@
   ;; 设置默认英文字体
   (set-face-attribute 'default nil :font
                       (format "%s:pixelsize=%d" (car fonts) 24))
-  (set-fontset-font t 'han (font-spec :family (cadr fonts)) nil 'prepend)
+  (set-fontset-font t 'han (font-spec :family (cadr fonts)))
   (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend))
 
 
