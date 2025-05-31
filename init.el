@@ -104,16 +104,21 @@
   (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
 (when (eq system-type 'windows-nt)
-  (setq fonts '("JetbrainsMono Regular"))
-  (set-fontset-font t 'unicode "Segoe UI Emoji" nil 'prepend)
+  (setq fonts '("JetbrainsMono Regular" "MiSans VF"))
   (set-face-attribute 'default nil :font
-                      (format "%s:pixelsize=%d" (car fonts) 24)))
+                      (format "%s:pixelsize=%d" (car fonts) 16))
+  (set-fontset-font t 'han (font-spec :family (cadr fonts)))
+  (set-fontset-font t 'unicode "Segoe UI Emoji" nil 'prepend))
 
 (when (eq system-type 'gnu/linux)
-  (setq fonts '("Jetbrains Mono" "Source Han Sans SC"))
-  (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend)
+  ;;(setq fonts '("Jetbrains Mono" "Source Han Sans SC"))
+  (setq fonts '("Jetbrains Mono" "MiSans VF"))
+  ;; 设置默认英文字体
   (set-face-attribute 'default nil :font
-                      (format "%s:pixelsize=%d" (car fonts) 24)))
+                      (format "%s:pixelsize=%d" (car fonts) 24))
+  (set-fontset-font t 'han (font-spec :family (cadr fonts)) nil 'prepend)
+  (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend))
+
 
 ;;让鼠标滚动更好用
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
