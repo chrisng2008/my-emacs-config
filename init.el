@@ -214,3 +214,21 @@ See `org-capture-templates' for more information."
   :config
   (when (memq window-system '(mac ns x)) ; 通常只在 GUI 环境下需要
     (exec-path-from-shell-initialize)))
+
+(when (eq system-type 'darwin)
+(use-package org-latex-impatient
+  :defer t  ; 延迟加载，直到需要时才加载
+  :hook (org-mode . org-latex-impatient-mode) ; 在打开 Org 文件时自动启用
+  :init
+  (setq org-latex-impatient-tex2svg-bin
+        "/usr/local/bin/tex2svg-wrapper"))) ; 设置 tex2svg 的路径
+
+;;(with-eval-after-load 'org
+;;  (setq org-html-with-latex 'mathjax)
+;;  (setq org-html-mathjax-options
+;;        '((:version "3"
+;;           :align "center"
+;;           :uri "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"))))
+
+;;(add-hook 'org-mode-hook 'org-fragtog-mode)
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
