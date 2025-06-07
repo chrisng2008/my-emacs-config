@@ -134,7 +134,7 @@
 ;; org mode 换行
 ;;(add-hook 'org-mode-hook 'visual-line-mode)
 
-(load-theme 'doom-one-light t)
+(load-theme 'doom-one t)
 
 
 ;; 配置跨平台输入法方案
