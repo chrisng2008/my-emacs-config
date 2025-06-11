@@ -232,3 +232,24 @@ See `org-capture-templates' for more information."
 
 ;;(add-hook 'org-mode-hook 'org-fragtog-mode)
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+
+;; AUCTeX 多平台配置 (macOS & WSL)
+(load "auctex.el" nil t t)
+
+;; 下面这行有时会导致bug，若出现问题请注掉
+
+;;(load "preview-latex.el" nil t t)
+
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq-default TeX-master nil)
+(setq TeX-output-view-style (quote (("^pdf$" "." "evince %o %(outpage)"))))
+(add-hook 'LaTeX-mode-hook
+(lambda()
+(add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
+(setq TeX-command-default "XeLaTeX")))
+
+(when (eq system-type 'darwin)
+(setq TeX-view-program-selection '((output-pdf "Skim")))
+;; Skim 的参数，--unique 确保只打开一个窗口
+(setq TeX-view-program-Skim-args '("--unique" "%o")))

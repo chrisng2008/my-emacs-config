@@ -134,7 +134,7 @@
 ;; org mode 换行
 ;;(add-hook 'org-mode-hook 'visual-line-mode)
 
-(load-theme 'doom-one-light t)
+(load-theme 'doom-one t)
 
 
 ;; 配置跨平台输入法方案
@@ -163,9 +163,10 @@
    '("5c7720c63b729140ed88cf35413f36c728ab7c70f8cd8422d9ee1cedeb618de5"
      default))
  '(package-selected-packages
-   '(company doom-themes embark exec-path-from-shell keycast marginalia
-	     orderless org-preview-html ox-hugo rime use-package-hydra
-	     with-editor)))
+   '(auctex company doom-themes embark exec-path-from-shell keycast
+	    marginalia orderless org-fragtog org-latex-impatient
+	    org-preview-html ox-hugo rime use-package-hydra
+	    with-editor)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -218,14 +219,53 @@ See `org-capture-templates' for more information."
   (when (memq window-system '(mac ns x)) ; 通常只在 GUI 环境下需要
     (exec-path-from-shell-initialize)))
 
-
+(when (eq system-type 'darwin)
 (use-package org-latex-impatient
   :defer t  ; 延迟加载，直到需要时才加载
   :hook (org-mode . org-latex-impatient-mode) ; 在打开 Org 文件时自动启用
   :init
   (setq org-latex-impatient-tex2svg-bin
-        "~/node_modules/mathjax-node-cli/bin/tex2svg")) ; 设置 tex2svg 的路径
+        "/usr/local/bin/tex2svg-wrapper"))) ; 设置 tex2svg 的路径
+
+;;(with-eval-after-load 'org
+;;  (setq org-html-with-latex 'mathjax)
+;;  (setq org-html-mathjax-options
+;;        '((:version "3"
+;;           :align "center"
+;;           :uri "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"))))
+
+;;(add-hook 'org-mode-hook 'org-fragtog-mode)
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 
 
+;; Latex
+(use-package tex
+  :ensure auctex
+  :defer t  ; 延迟加载，直到打开 `.tex` 文件
+  :mode ("\\.tex\\'" . LaTeX-mode)
+  :config
+  ;; 设置默认 LaTeX 引擎（xelatex/pdflatex/lualatex）
+  (setq TeX-engine 'xelatex)
+  
+  ;; 启用 RefTeX（参考文献管理）
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  (setq reftex-plug-into-AUCTeX t)
+  
+  ;; 启用自动补全（可选，需要 company-mode）
+  (add-hook 'LaTeX-mode-hook 'company-mode)
+  
+  ;; 启用语法检查（可选，需要 flycheck）
+  (add-hook 'LaTeX-mode-hook 'flycheck-mode))
 
+;; 使用 pdf-tools 预览（推荐）
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install)
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+  (setq TeX-view-program-list '(("PDF Tools" "emacsclient --eval '(pdf-tools-menu-from-tex)'"))))
 
+(use-package preview
+  :after auctex
+  :config
+  (add-hook 'LaTeX-mode-hook 'LaTeX-preview-setup))
