@@ -134,7 +134,7 @@
 ;; org mode 换行
 ;;(add-hook 'org-mode-hook 'visual-line-mode)
 
-(load-theme 'doom-one t)
+(load-theme 'doom-dracula t)
 
 
 ;; 配置跨平台输入法方案
@@ -233,11 +233,14 @@ See `org-capture-templates' for more information."
 ;;(add-hook 'org-mode-hook 'org-fragtog-mode)
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 
-;; AUCTeX 多平台配置 (macOS & WSL)
+
+;; org mode
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+;; Latex
 (load "auctex.el" nil t t)
-
 ;; 下面这行有时会导致bug，若出现问题请注掉
-
 ;;(load "preview-latex.el" nil t t)
 
 (setq TeX-auto-save t)
