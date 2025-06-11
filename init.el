@@ -256,3 +256,23 @@ See `org-capture-templates' for more information."
 (setq TeX-view-program-selection '((output-pdf "Skim")))
 ;; Skim 的参数，--unique 确保只打开一个窗口
 (setq TeX-view-program-Skim-args '("--unique" "%o")))
+
+
+;; 安装并配置 pdf-tools
+(when (eq system-type 'gnu/linux)
+(use-package pdf-tools
+  :init
+  (pdf-tools-install) ; 运行安装脚本，可能需要编译一些东西
+  :config
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+  (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
+  (setq TeX-source-correlate-start-server t) ; 启用 SyncTeX
+  (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer) ; 编译完成后自动刷新PDF
+  ;; 其他 pdf-tools 的自定义设置，例如按键绑定等
+  ;; (define-key pdf-view-mode-map (kbd "<right>") 'pdf-view-next-page-command)
+  ;; (define-key pdf-view-mode-map (kbd "<left>") 'pdf-view-previous-page-command)
+  )
+
+;; 启用 AUCTeX 的 SyncTeX 模式
+(setq TeX-source-correlate-mode t)
+(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
