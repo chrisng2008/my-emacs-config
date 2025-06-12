@@ -60,6 +60,9 @@
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 
+;; Org Mode 自动断行
+(add-hook 'org-mode-hook 'toggle-truncate-lines)
+
 
 (global-set-key (kbd "C-h C-f") 'find-function)
 
@@ -161,7 +164,12 @@
  '(custom-safe-themes
    '("5c7720c63b729140ed88cf35413f36c728ab7c70f8cd8422d9ee1cedeb618de5"
      default))
- '(package-selected-packages nil))
+ '(package-selected-packages
+   '(auctex-cluttex auctex-latexmk company doom-themes embark
+		    exec-path-from-shell keycast marginalia
+		    ns-auto-titlebar orderless org-bullets org-fragtog
+		    org-latex-impatient org-preview-html ox-hugo
+		    pdf-tools rime use-package-hydra with-editor)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -213,6 +221,9 @@ See `org-capture-templates' for more information."
   :config
   (when (memq window-system '(mac ns x)) ; 通常只在 GUI 环境下需要
     (exec-path-from-shell-initialize)))
+
+;; mac title bar
+(when (eq system-type 'darwin) (ns-auto-titlebar-mode))
 
 (when (eq system-type 'darwin)
 (use-package org-latex-impatient

@@ -10,8 +10,8 @@
  (last-modified 26672 18802 758678 0))
 ("org-capture-last-stored"
  (filename . "~/myblog/all-blog.org")
- (front-context-string . "** TODO Linux服务器")
- (rear-context-string . "喝酒，洋哥、于哥也一起过来喝。\n")
- (position . 4853)
- (last-modified 26681 19096 283369 0))
+ (front-context-string . "** TODO orgmode ")
+ (rear-context-string . "e/clash/6.png]]\n")
+ (position . 8320)
+ (last-modified 26690 38748 669997 0))
 )
