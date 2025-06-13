@@ -164,12 +164,7 @@
  '(custom-safe-themes
    '("5c7720c63b729140ed88cf35413f36c728ab7c70f8cd8422d9ee1cedeb618de5"
      default))
- '(package-selected-packages
-   '(auctex-cluttex auctex-latexmk company doom-themes embark
-		    exec-path-from-shell keycast marginalia
-		    ns-auto-titlebar orderless org-bullets org-fragtog
-		    org-latex-impatient org-preview-html ox-hugo
-		    pdf-tools rime use-package-hydra with-editor)))
+ '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -233,13 +228,6 @@ See `org-capture-templates' for more information."
   (setq org-latex-impatient-tex2svg-bin
         "/usr/local/bin/tex2svg-wrapper"))) ; 设置 tex2svg 的路径
 
-;;(with-eval-after-load 'org
-;;  (setq org-html-with-latex 'mathjax)
-;;  (setq org-html-mathjax-options
-;;        '((:version "3"
-;;           :align "center"
-;;           :uri "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"))))
-
 ;;(add-hook 'org-mode-hook 'org-fragtog-mode)
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 
@@ -262,27 +250,81 @@ See `org-capture-templates' for more information."
 (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
 (setq TeX-command-default "XeLaTeX")))
 
+;; macos
 (when (eq system-type 'darwin)
 (setq TeX-view-program-selection '((output-pdf "Skim")))
 ;; Skim 的参数，--unique 确保只打开一个窗口
 (setq TeX-view-program-Skim-args '("--unique" "%o")))
 
-
-;; 安装并配置 pdf-tools
+;; --- GNU/Linux (包括 WSL) 的通用 pdf-tools 配置 ---
+;; 这个 use-package 块保持不变，它会安装 pdf-tools 并设置其内部查看器的行为。
+;; 但是，在 WSL 环境下，我们将在后面的代码中覆盖 TeX-view-program-selection。
 (when (eq system-type 'gnu/linux)
-(use-package pdf-tools
-  :init
-  (pdf-tools-install) ; 运行安装脚本，可能需要编译一些东西
-  :config
-  (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
-  (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
-  (setq TeX-source-correlate-start-server t) ; 启用 SyncTeX
-  (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer) ; 编译完成后自动刷新PDF
-  ;; 其他 pdf-tools 的自定义设置，例如按键绑定等
-  ;; (define-key pdf-view-mode-map (kbd "<right>") 'pdf-view-next-page-command)
-  ;; (define-key pdf-view-mode-map (kbd "<left>") 'pdf-view-previous-page-command)
-  )
+  (use-package pdf-tools
+    :init
+    (pdf-tools-install) ; 运行安装脚本，可能需要编译一些东西
+    :config
+    ;; 这里依然会把 "PDF Tools" 注册为 AUCTeX 的一个查看器选项
+    (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+    (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
+    (setq TeX-source-correlate-start-server t) ; 启用 SyncTeX
+    (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer) ; 编译完成后自动刷新PDF
+    ;; 其他 pdf-tools 的自定义设置，例如按键绑定等
+    )
 
-;; 启用 AUCTeX 的 SyncTeX 模式
-(setq TeX-source-correlate-mode t)
-(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
+  ;; 启用 AUCTeX 的 SyncTeX 模式
+  (setq TeX-source-correlate-mode t)
+  (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
+
+
+;; --- 针对 WSL 环境的特定覆盖 ---
+;; 这一段代码放在 pdf-tools 配置之后，以确保它能覆盖之前的设置。
+(when (string-equal system-type "gnu/linux")
+  (let ((uname-output (shell-command-to-string "uname -a")))
+    (when (string-match-p "microsoft" uname-output)
+      ;; 覆盖 AUCTeX 的 PDF 查看器设置，让它默认使用 wslview
+      ;; 'output-pdf 是指编译输出是 PDF 文件
+      ;; "WSLViewPDF" 是我们自定义的查看器名称
+      (setq TeX-view-program-selection '((output-pdf "WSLViewPDF")))
+      ;; 定义 "WSLViewPDF" 的实际执行命令
+      ;; %o 是 AUCTeX 传递给查看器的输出文件路径
+      (setq TeX-view-program-list '(("WSLViewPDF" "wslview %o")))
+
+      ;; 确保 browse-url-browser-function 也正确设置，以防 Org-mode 使用它
+      (setq browse-url-browser-function 'browse-url-generic
+            browse-url-generic-program "wslview")
+
+      ;; HTML 规则 (保持不变)
+      (setq org-file-apps
+            (cons '("\\.x?html?\\'" . "wslview %s")
+                  (assq-delete-all "\\.x?html?\\'" org-file-apps)))
+
+      ;; PDF 规则 (使用 wslview 打开 Windows 默认 PDF 浏览器)
+      (setq org-file-apps
+            (cons '("\\.pdf\\'" . "wslview %s")
+                  (assq-delete-all "\\.pdf\\'" org-file-apps)))
+      )))
+
+
+
+
+(when (string-equal system-type "gnu/linux")
+  (let ((uname-output (shell-command-to-string "uname -a")))
+    (when (string-match-p "microsoft" uname-output)
+      ;; 这行代码确保 Emacs 在 WSL 中被识别为使用 wslview
+      (setq browse-url-browser-function 'browse-url-generic
+            browse-url-generic-program "wslview")
+
+      ;; 修改 org-file-apps，让它使用 wslview 打开 HTML 文件
+      (setq org-file-apps
+            (cons '("\\.x?html?\\'" . "wslview %s") ; 新规则：使用 wslview 打开 HTML
+                  (assq-delete-all "\\.x?html?\\'" org-file-apps))) ; 删除旧的 HTML 规则
+
+      ;; --- Add this section for PDF files ---
+            ;; --- 修正后的 PDF 规则 (使用默认 PDF 浏览器) ---
+      (setq org-file-apps
+            (cons '("\\.pdf\\'" . "wslview %s") ; 简化的规则，让 wslview 打开 Windows 默认 PDF 浏览器
+                  (assq-delete-all "\\.pdf\\'" org-file-apps)))
+
+      ;; 缺少最外层的一个右括号
+      ))) ; 补齐最外层的右括号

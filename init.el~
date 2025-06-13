@@ -60,6 +60,9 @@
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 
+;; Org Mode 自动断行
+(add-hook 'org-mode-hook 'toggle-truncate-lines)
+
 
 (global-set-key (kbd "C-h C-f") 'find-function)
 
@@ -134,8 +137,7 @@
 ;; org mode 换行
 ;;(add-hook 'org-mode-hook 'visual-line-mode)
 
-(load-theme 'doom-dracula t)
-
+(load-theme 'doom-solarized-light t)
 
 ;; 配置跨平台输入法方案
 ;; Rime需要支持动态模块的Emacs，Linux默认支持
@@ -162,11 +164,7 @@
  '(custom-safe-themes
    '("5c7720c63b729140ed88cf35413f36c728ab7c70f8cd8422d9ee1cedeb618de5"
      default))
- '(package-selected-packages
-   '(auctex-cluttex company doom-themes embark exec-path-from-shell
-		    keycast marginalia orderless org-bullets
-		    org-preview-html ox-hugo pdf-tools rime tablist
-		    use-package-hydra)))
+ '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -219,6 +217,9 @@ See `org-capture-templates' for more information."
   (when (memq window-system '(mac ns x)) ; 通常只在 GUI 环境下需要
     (exec-path-from-shell-initialize)))
 
+;; mac title bar
+(when (eq system-type 'darwin) (ns-auto-titlebar-mode))
+
 (when (eq system-type 'darwin)
 (use-package org-latex-impatient
   :defer t  ; 延迟加载，直到需要时才加载
@@ -263,6 +264,7 @@ See `org-capture-templates' for more information."
 
 
 ;; 安装并配置 pdf-tools
+(when (eq system-type 'gnu/linux)
 (use-package pdf-tools
   :init
   (pdf-tools-install) ; 运行安装脚本，可能需要编译一些东西
@@ -278,3 +280,27 @@ See `org-capture-templates' for more information."
 
 ;; 启用 AUCTeX 的 SyncTeX 模式
 (setq TeX-source-correlate-mode t)
+(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
+
+
+
+(when (string-equal system-type "gnu/linux")
+  (let ((uname-output (shell-command-to-string "uname -a")))
+    (when (string-match-p "microsoft" uname-output)
+      ;; 这行代码确保 Emacs 在 WSL 中被识别为使用 wslview
+      (setq browse-url-browser-function 'browse-url-generic
+            browse-url-generic-program "wslview")
+
+      ;; 修改 org-file-apps，让它使用 wslview 打开 HTML 文件
+      (setq org-file-apps
+            (cons '("\\.x?html?\\'" . "wslview %s") ; 新规则：使用 wslview 打开 HTML
+                  (assq-delete-all "\\.x?html?\\'" org-file-apps))) ; 删除旧的 HTML 规则
+
+      ;; --- Add this section for PDF files ---
+            ;; --- 修正后的 PDF 规则 (使用默认 PDF 浏览器) ---
+      (setq org-file-apps
+            (cons '("\\.pdf\\'" . "wslview %s") ; 简化的规则，让 wslview 打开 Windows 默认 PDF 浏览器
+                  (assq-delete-all "\\.pdf\\'" org-file-apps)))
+
+      ;; 缺少最外层的一个右括号
+      ))) ; 补齐最外层的右括号
