@@ -164,7 +164,12 @@
  '(custom-safe-themes
    '("5c7720c63b729140ed88cf35413f36c728ab7c70f8cd8422d9ee1cedeb618de5"
      default))
- '(package-selected-packages nil))
+ '(package-selected-packages
+   '(auctex-cluttex company doom-themes embark exec-path-from-shell
+		    grip-mode keycast marginalia markdown-mode
+		    orderless org-bullets org-fragtog
+		    org-latex-impatient org-preview-html ox-hugo
+		    pdf-tools rime use-package-hydra)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -228,12 +233,13 @@ See `org-capture-templates' for more information."
   (setq org-latex-impatient-tex2svg-bin
         "/usr/local/bin/tex2svg-wrapper"))) ; 设置 tex2svg 的路径
 
-;;(with-eval-after-load 'org
-;;  (setq org-html-with-latex 'mathjax)
-;;  (setq org-html-mathjax-options
-;;        '((:version "3"
-;;           :align "center"
-;;           :uri "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"))))
+(when (eq system-type 'gnu/linux)
+(use-package org-latex-impatient
+  :defer t  ; 延迟加载，直到需要时才加载
+  :hook (org-mode . org-latex-impatient-mode) ; 在打开 Org 文件时自动启用
+  :init
+  (setq org-latex-impatient-tex2svg-bin
+        "/home/chris/script/mathjax-converter/tex2svg"))) ; 设置 tex2svg 的路径
 
 ;;(add-hook 'org-mode-hook 'org-fragtog-mode)
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
@@ -257,30 +263,61 @@ See `org-capture-templates' for more information."
 (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
 (setq TeX-command-default "XeLaTeX")))
 
+;; macos
 (when (eq system-type 'darwin)
 (setq TeX-view-program-selection '((output-pdf "Skim")))
 ;; Skim 的参数，--unique 确保只打开一个窗口
 (setq TeX-view-program-Skim-args '("--unique" "%o")))
 
-
-;; 安装并配置 pdf-tools
+;; --- GNU/Linux (包括 WSL) 的通用 pdf-tools 配置 ---
+;; 这个 use-package 块保持不变，它会安装 pdf-tools 并设置其内部查看器的行为。
+;; 但是，在 WSL 环境下，我们将在后面的代码中覆盖 TeX-view-program-selection。
 (when (eq system-type 'gnu/linux)
-(use-package pdf-tools
-  :init
-  (pdf-tools-install) ; 运行安装脚本，可能需要编译一些东西
-  :config
-  (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
-  (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
-  (setq TeX-source-correlate-start-server t) ; 启用 SyncTeX
-  (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer) ; 编译完成后自动刷新PDF
-  ;; 其他 pdf-tools 的自定义设置，例如按键绑定等
-  ;; (define-key pdf-view-mode-map (kbd "<right>") 'pdf-view-next-page-command)
-  ;; (define-key pdf-view-mode-map (kbd "<left>") 'pdf-view-previous-page-command)
-  )
+  (use-package pdf-tools
+    :init
+    (pdf-tools-install) ; 运行安装脚本，可能需要编译一些东西
+    :config
+    ;; 这里依然会把 "PDF Tools" 注册为 AUCTeX 的一个查看器选项
+    (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+    (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
+    (setq TeX-source-correlate-start-server t) ; 启用 SyncTeX
+    (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer) ; 编译完成后自动刷新PDF
+    ;; 其他 pdf-tools 的自定义设置，例如按键绑定等
+    )
 
-;; 启用 AUCTeX 的 SyncTeX 模式
-(setq TeX-source-correlate-mode t)
-(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
+  ;; 启用 AUCTeX 的 SyncTeX 模式
+  (setq TeX-source-correlate-mode t)
+  (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
+
+
+;; --- 针对 WSL 环境的特定覆盖 ---
+;; 这一段代码放在 pdf-tools 配置之后，以确保它能覆盖之前的设置。
+(when (string-equal system-type "gnu/linux")
+  (let ((uname-output (shell-command-to-string "uname -a")))
+    (when (string-match-p "microsoft" uname-output)
+      ;; 覆盖 AUCTeX 的 PDF 查看器设置，让它默认使用 wslview
+      ;; 'output-pdf 是指编译输出是 PDF 文件
+      ;; "WSLViewPDF" 是我们自定义的查看器名称
+      (setq TeX-view-program-selection '((output-pdf "WSLViewPDF")))
+      ;; 定义 "WSLViewPDF" 的实际执行命令
+      ;; %o 是 AUCTeX 传递给查看器的输出文件路径
+      (setq TeX-view-program-list '(("WSLViewPDF" "wslview %o")))
+
+      ;; 确保 browse-url-browser-function 也正确设置，以防 Org-mode 使用它
+      (setq browse-url-browser-function 'browse-url-generic
+            browse-url-generic-program "wslview")
+
+      ;; HTML 规则 (保持不变)
+      (setq org-file-apps
+            (cons '("\\.x?html?\\'" . "wslview %s")
+                  (assq-delete-all "\\.x?html?\\'" org-file-apps)))
+
+      ;; PDF 规则 (使用 wslview 打开 Windows 默认 PDF 浏览器)
+      (setq org-file-apps
+            (cons '("\\.pdf\\'" . "wslview %s")
+                  (assq-delete-all "\\.pdf\\'" org-file-apps)))
+      )))
+
 
 
 
@@ -304,3 +341,29 @@ See `org-capture-templates' for more information."
 
       ;; 缺少最外层的一个右括号
       ))) ; 补齐最外层的右括号
+
+
+;; 实时预览
+(when (string-equal system-type "gnu/linux")
+(use-package grip-mode
+  :ensure t
+  :hook (markdown-mode . grip-mode)
+  :config
+  ;; 设置 grip Python 可执行文件的路径，指向虚拟环境中的 grip
+  ;; 这里假设你的虚拟环境路径是 ~/.venvs/grip_env
+  (setq grip-program (expand-file-name "~/.venvs/grip_env/bin/grip"))
+
+  ;; 设置浏览器命令 (保持不变)
+  (when (string-equal system-type "gnu/linux")
+    (when (string-match-p "microsoft" (shell-command-to-string "uname -a"))
+      (setq grip-browser "wslview")
+      ))
+
+  ;; ... (其他 grip-mode 配置，如 grip-render-engine 等) ...
+
+  ;; 绑定快捷键 (保持不变)
+  (define-key markdown-mode-map (kbd "C-c g p") 'grip-preview-mode)
+  (define-key markdown-mode-map (kbd "C-c g k") 'grip-kill-server)
+))
+
+

@@ -164,7 +164,12 @@
  '(custom-safe-themes
    '("5c7720c63b729140ed88cf35413f36c728ab7c70f8cd8422d9ee1cedeb618de5"
      default))
- '(package-selected-packages nil))
+ '(package-selected-packages
+   '(auctex-cluttex company doom-themes embark exec-path-from-shell
+		    grip-mode keycast marginalia markdown-mode
+		    orderless org-bullets org-fragtog
+		    org-latex-impatient org-preview-html ox-hugo
+		    pdf-tools rime use-package-hydra)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -227,6 +232,14 @@ See `org-capture-templates' for more information."
   :init
   (setq org-latex-impatient-tex2svg-bin
         "/usr/local/bin/tex2svg-wrapper"))) ; 设置 tex2svg 的路径
+
+(when (eq system-type 'gnu/linux)
+(use-package org-latex-impatient
+  :defer t  ; 延迟加载，直到需要时才加载
+  :hook (org-mode . org-latex-impatient-mode) ; 在打开 Org 文件时自动启用
+  :init
+  (setq org-latex-impatient-tex2svg-bin
+        "/home/chris/script/mathjax-converter/tex2svg"))) ; 设置 tex2svg 的路径
 
 ;;(add-hook 'org-mode-hook 'org-fragtog-mode)
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
@@ -328,3 +341,5 @@ See `org-capture-templates' for more information."
 
       ;; 缺少最外层的一个右括号
       ))) ; 补齐最外层的右括号
+
+
