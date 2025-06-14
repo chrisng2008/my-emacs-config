@@ -137,7 +137,8 @@
 ;; org mode 换行
 ;;(add-hook 'org-mode-hook 'visual-line-mode)
 
-(load-theme 'doom-solarized-light t)
+;;(load-theme 'doom-solarized-light t)
+(load-theme 'doom-tokyo-night t)
 
 ;; 配置跨平台输入法方案
 ;; Rime需要支持动态模块的Emacs，Linux默认支持
@@ -164,12 +165,7 @@
  '(custom-safe-themes
    '("5c7720c63b729140ed88cf35413f36c728ab7c70f8cd8422d9ee1cedeb618de5"
      default))
- '(package-selected-packages
-   '(auctex-cluttex company doom-themes embark exec-path-from-shell
-		    grip-mode keycast marginalia markdown-mode
-		    orderless org-bullets org-fragtog
-		    org-latex-impatient org-preview-html ox-hugo
-		    pdf-tools rime use-package-hydra)))
+ '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
