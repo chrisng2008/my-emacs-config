@@ -137,8 +137,7 @@
 ;; org mode 换行
 ;;(add-hook 'org-mode-hook 'visual-line-mode)
 
-;;(load-theme 'doom-solarized-light t)
-(load-theme 'doom-tokyo-night t)
+(load-theme 'doom-solarized-light t)
 
 ;; 配置跨平台输入法方案
 ;; Rime需要支持动态模块的Emacs，Linux默认支持
