@@ -340,7 +340,7 @@ See `org-capture-templates' for more information."
 
 ;; 启用 AUCTeX 的 SyncTeX 模式
 (setq TeX-source-correlate-mode t)
-(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
+(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 ;; emacs TUI using mouse mode
 (when (not (display-graphic-p))
