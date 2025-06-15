@@ -345,3 +345,9 @@ See `org-capture-templates' for more information."
 ;; emacs TUI using mouse mode
 (when (not (display-graphic-p))
   (xterm-mouse-mode +1))
+
+(add-to-list 'load-path
+              "~/.emacs.d/plugins/yasnippet")
+(require 'yasnippet)
+(yas-global-mode 1)
+(use-package yasnippet-snippets)
