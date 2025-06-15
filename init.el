@@ -218,7 +218,7 @@ See `org-capture-templates' for more information."
     (exec-path-from-shell-initialize)))
 
 ;; mac title bar
-(when (eq system-type 'darwin) (ns-auto-titlebar-mode))
+;;(when (eq system-type 'darwin) (ns-auto-titlebar-mode))
 
 (when (eq system-type 'darwin)
 (use-package org-latex-impatient
@@ -338,3 +338,10 @@ See `org-capture-templates' for more information."
       ))) ; 补齐最外层的右括号
 
 
+;; 启用 AUCTeX 的 SyncTeX 模式
+(setq TeX-source-correlate-mode t)
+(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1))))
+
+;; emacs TUI using mouse mode
+(when (not (display-graphic-p))
+  (xterm-mouse-mode +1))
