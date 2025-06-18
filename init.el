@@ -164,7 +164,8 @@
  '(custom-safe-themes
    '("5c7720c63b729140ed88cf35413f36c728ab7c70f8cd8422d9ee1cedeb618de5"
      default))
- '(package-selected-packages nil))
+ '(package-selected-packages nil)
+ '(warning-suppress-log-types '((ox-latex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -351,3 +352,11 @@ See `org-capture-templates' for more information."
 (require 'yasnippet)
 (yas-global-mode 1)
 (use-package yasnippet-snippets)
+
+;; Markdown preview
+(add-to-list 'load-path "~/.emacs.d/plugins/markdown-preview-mode")
+(require 'markdown-preview-mode)
+(setq markdown-preview-stylesheets (list "http://thomasf.github.io/solarized-css/solarized-light.min.css"))
+(add-to-list 'markdown-preview-javascript "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
+(add-to-list 'markdown-preview-javascript "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
+
