@@ -166,10 +166,10 @@
      default))
  '(package-selected-packages
    '(auctex-cluttex company doom-themes embark exec-path-from-shell
-		    grip-mode keycast marginalia markdown-mode
-		    orderless org-bullets org-fragtog
-		    org-latex-impatient org-preview-html ox-hugo
-		    pdf-tools rime use-package-hydra)))
+		    grip-mode keycast marginalia orderless org-bullets
+		    org-fragtog org-latex-impatient org-preview-html
+		    ox-hugo pdf-tools rime use-package-hydra
+		    yasnippet-snippets)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -215,6 +215,11 @@ See `org-capture-templates' for more information."
       '(("http" . "127.0.0.1:7899")
         ("https" . "127.0.0.1:7899"))))
 
+(when (eq system-type 'gnu/linux)
+(setq url-proxy-services
+      '(("http" . "127.0.0.1:7897")
+        ("https" . "127.0.0.1:7897"))))
+
 ;; mac
 (use-package exec-path-from-shell
   :ensure t
@@ -223,7 +228,7 @@ See `org-capture-templates' for more information."
     (exec-path-from-shell-initialize)))
 
 ;; mac title bar
-(when (eq system-type 'darwin) (ns-auto-titlebar-mode))
+;;(when (eq system-type 'darwin) (ns-auto-titlebar-mode))
 
 (when (eq system-type 'darwin)
 (use-package org-latex-impatient
@@ -343,27 +348,16 @@ See `org-capture-templates' for more information."
       ))) ; 补齐最外层的右括号
 
 
-;; 实时预览
-(when (string-equal system-type "gnu/linux")
-(use-package grip-mode
-  :ensure t
-  :hook (markdown-mode . grip-mode)
-  :config
-  ;; 设置 grip Python 可执行文件的路径，指向虚拟环境中的 grip
-  ;; 这里假设你的虚拟环境路径是 ~/.venvs/grip_env
-  (setq grip-program (expand-file-name "~/.venvs/grip_env/bin/grip"))
+;; 启用 AUCTeX 的 SyncTeX 模式
+(setq TeX-source-correlate-mode t)
+(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
 
-  ;; 设置浏览器命令 (保持不变)
-  (when (string-equal system-type "gnu/linux")
-    (when (string-match-p "microsoft" (shell-command-to-string "uname -a"))
-      (setq grip-browser "wslview")
-      ))
+;; emacs TUI using mouse mode
+(when (not (display-graphic-p))
+  (xterm-mouse-mode +1))
 
-  ;; ... (其他 grip-mode 配置，如 grip-render-engine 等) ...
-
-  ;; 绑定快捷键 (保持不变)
-  (define-key markdown-mode-map (kbd "C-c g p") 'grip-preview-mode)
-  (define-key markdown-mode-map (kbd "C-c g k") 'grip-kill-server)
-))
-
-
+(add-to-list 'load-path
+              "~/.emacs.d/plugins/yasnippet")
+(require 'yasnippet)
+(yas-global-mode 1)
+(use-package yasnippet-snippets)

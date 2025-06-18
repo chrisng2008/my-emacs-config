@@ -211,6 +211,11 @@ See `org-capture-templates' for more information."
       '(("http" . "127.0.0.1:7899")
         ("https" . "127.0.0.1:7899"))))
 
+(when (eq system-type 'gnu/linux)
+(setq url-proxy-services
+      '(("http" . "127.0.0.1:7897")
+        ("https" . "127.0.0.1:7897"))))
+
 ;; mac
 (use-package exec-path-from-shell
   :ensure t
@@ -337,7 +342,6 @@ See `org-capture-templates' for more information."
 
       ;; 缺少最外层的一个右括号
       ))) ; 补齐最外层的右括号
-
 
 ;; 启用 AUCTeX 的 SyncTeX 模式
 (setq TeX-source-correlate-mode t)
