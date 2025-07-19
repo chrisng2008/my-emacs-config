@@ -98,12 +98,13 @@
 
 ;; 字体配置
 (when (eq system-type 'darwin)
+;;  (setq fonts '("Menlo" "PingFang SC"))
   (setq fonts '("Jetbrains Mono" "PingFang SC"))
   ;; 设置默认英文字体（JetbrainsMono NF Regular）
   (set-face-attribute 'default nil :font
                       (format "%s:pixelsize=%d" (car fonts) 16))
   (set-fontset-font t 'han (font-spec :family (cadr fonts)))
-  ;; 添加emoji字体支持
+ ;; 添加emoji字体支持
   (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
 (when (eq system-type 'windows-nt)

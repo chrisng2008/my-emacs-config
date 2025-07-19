@@ -10,8 +10,8 @@
  (last-modified 26672 18802 758678 0))
 ("org-capture-last-stored"
  (filename . "~/myblog/all-blog.org")
- (front-context-string . "** TODO orgmode ")
- (rear-context-string . "e/clash/6.png]]\n")
- (position . 8320)
- (last-modified 26690 38748 669997 0))
+ (front-context-string . "** TODO 夜爬白云山\n:P")
+ (rear-context-string . "1.5))\n#+END_SRC\n")
+ (position . 13029)
+ (last-modified 26698 29558 754074 0))
 )
