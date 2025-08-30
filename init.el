@@ -247,9 +247,9 @@ See `org-capture-templates' for more information."
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 
 
-;; org mode
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;; org mode bullets
+;;(require 'org-bullets)
+;;(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 ;; Latex
 (load "auctex.el" nil t t)
