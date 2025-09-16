@@ -1,0 +1,18 @@
+;; Org Settings
+
+
+;; Org Mode 自动断行
+(add-hook 'org-mode-hook 'toggle-truncate-lines)
+
+;; html preview
+(require 'org-preview-html)
+
+;; org mode 换行
+;;(add-hook 'org-mode-hook 'visual-line-mode)
+
+
+;;latex preview
+;;(require 'org-latex-preview)
+;;(setq org-latex-preview-auto-generate t) ; 自动预览
+
+(provide 'init-org)
