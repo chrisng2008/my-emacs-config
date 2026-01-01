@@ -35,8 +35,8 @@
 ;; eww proxy macos
 (when (eq system-type 'darwin)
 (setq url-proxy-services
-      '(("http" . "127.0.0.1:7899")
-        ("https" . "127.0.0.1:7899"))))
+      '(("http" . "127.0.0.1:1082")
+        ("https" . "127.0.0.1:1082"))))
 
 (when (eq system-type 'gnu/linux)
 (setq url-proxy-services

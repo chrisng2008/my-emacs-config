@@ -6,6 +6,16 @@
 ;; Theme
 (load-theme 'doom-solarized-light t)
 
+;; 定义一个函数来根据外观加载主题
+;; 确保 doom-themes 已经加载
+
+
+
+;;(use-package color-theme-sanityinc-tomorrow
+;;  :ensure t
+;;  :config
+;;  (load-theme 'sanityinc-tomorrow-night t))  ; 或者其他你喜欢的变体，如 'sanityinc-tomorrow-day
+
 ;; 同时设置英文字体和中文字体
 ;;(set-face-attribute 'default nil :font "JetBrains Mono-16")
 ;;(set-fontset-font t 'han (font-spec :family "PingFang SC"))
